@@ -17,5 +17,8 @@ public class EntryPoint : IAsyncStartable
     {
         ILoadScreenService service = await _sceneHolder.GetScene<ILoadScreenService>();
         service.StartLoad();
+        var result = await _sceneHolder.GetScene<IGameCircle>();
+        await result.Initialize();
+        service.StopLoad();
     }
 }

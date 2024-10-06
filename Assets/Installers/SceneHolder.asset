@@ -17,4 +17,8 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  _type: {fileID: 0}
+  _gameCircleScene:
+    m_AssetGUID: 91ecbbed4960bdd428bb5bf45e79b37a
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0

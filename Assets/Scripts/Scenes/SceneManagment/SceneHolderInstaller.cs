@@ -7,13 +7,13 @@ using UObject = UnityEngine.Object;
 public class SceneHolderInstaller : InstallerSO
 {
     [SerializeField] private AssetReference _loadingScreenScene;
-    [SerializeField] private UObject _type;
+    [SerializeField] private AssetReference _gameCircleScene;
 
     public override void Install(IContainerBuilder builder)
     {
         SceneHolder holder = new SceneHolder();
-
         holder.RegisterScene<ILoadScreenService>(_loadingScreenScene);
+        holder.RegisterScene<IGameCircle>(_gameCircleScene);
         builder.RegisterInstance<ISceneHolder>(holder);
     }
 }
