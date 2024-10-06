@@ -7,6 +7,12 @@
       "dependencies": {},
       "hash": "7c0f199fe0d3fc528024488ccd671e6c7b27745b"
     },
+    "com.merry-yellow.code-assist": {
+      "version": "file:com.merry-yellow.code-assist",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.addressables": {
       "version": "1.22.2",
       "depth": 0,
