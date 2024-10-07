@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be892219613c0442a9afe405974cd37, type: 3}
   m_Name: CharacterDatabase
   m_EditorClassIdentifier: 
+  CharacterPfb: {fileID: 2839741935779573686, guid: ece6642a0b367564aa680fa38aab22b6,
+    type: 3}

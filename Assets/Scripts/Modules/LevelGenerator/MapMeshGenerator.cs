@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using DG.Tweening;
 using VContainer;
+using System.Collections.Generic;
 
 public class MapMeshGenerator : IModule
 {
@@ -50,14 +51,24 @@ public class MapMeshGenerator : IModule
             for (int j = 0; j < _mapSize.y; j++)
             {
                 var obj = MonoBehaviour.Instantiate(_mapMeshCell);
-                float poseY = _mapRaw[i, j] > 0.5f ? 1 : 0;
+                bool isHigh = _mapRaw[i, j] > 0.5f;
+                float poseY = Round(_mapRaw[i, j], 0.25f);
                 Vector3 pose = new Vector3(i, poseY, j);
                 obj.transform.position = new Vector3(i, poseY, j);
                 obj.transform.DOJump(pose, 1, 1, 0.5f);
-                await UniTask.Yield();
+                if(isHigh)
+                {
+                    _runtimeData.HightPoints.Add(new(i, j));
+                }
+                else
+                    _runtimeData.LowPoints.Add(new(i, j));
+
             }
+            await UniTask.Yield();
         }
     }
+
+    private float Round(float value, float step) => (value - (value%step));
 
     private async UniTask PrepareRawData()
     {
@@ -88,6 +99,13 @@ public class MapMeshGenerator : IModule
 public class MapGeneratorRuntimeData : IModuleRuntimeData
 {
     public float[,] MapData;
+    public List<Vector2Int> LowPoints;
+    public List<Vector2Int> HightPoints;
 
+    public MapGeneratorRuntimeData()
+    {
+        LowPoints = new List<Vector2Int>();
+        HightPoints = new List<Vector2Int>();
+    }
 }
 
