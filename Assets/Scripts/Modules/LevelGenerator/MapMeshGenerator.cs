@@ -6,21 +6,14 @@ using DG.Tweening;
 using VContainer;
 using System.Collections.Generic;
 
-public class MapMeshGenerator : IModule
+public class MapMeshGenerator : BaseModule
 {
     private Vector2Int _mapSize = new Vector2Int(30, 30);
     private float _noizeScale = 0.2f;
     private float[,] _mapRaw;
     private GameObject _mapMeshCell;
-    private ReactiveProperty<bool> _isActive;
-    private string _moduleName = "Base Map Generator";
-
-    public IReactiveProperty<bool> IsActive => _isActive;
-    public string Name => _moduleName;
-
     private MapGeneratorDatabase _database;
     private MapGeneratorRuntimeData _runtimeData;
-
     private IRuntimeDataHolder _runtimeDataHolder;
 
     [Inject]
@@ -32,7 +25,7 @@ public class MapMeshGenerator : IModule
         _database = database;
     }
 
-    public async UniTask OnEnter()
+    public override async UniTask OnEnter()
     {
         _runtimeData = new MapGeneratorRuntimeData();
         _isActive = new ReactiveProperty<bool>(false);
@@ -42,6 +35,7 @@ public class MapMeshGenerator : IModule
         _isActive.Value = true;
         _runtimeData.MapData = _mapRaw;
         _runtimeDataHolder.SetData(_runtimeData);
+        await base.OnEnter();
     }
 
     private async UniTask InstanceObjects()
@@ -52,7 +46,8 @@ public class MapMeshGenerator : IModule
             {
                 var obj = MonoBehaviour.Instantiate(_mapMeshCell);
                 bool isHigh = _mapRaw[i, j] > 0.5f;
-                float poseY = Round(_mapRaw[i, j], 0.25f);
+                //float poseY = Round(_mapRaw[i, j], 0.25f);
+                float poseY = isHigh ? 1 : 0;
                 Vector3 pose = new Vector3(i, poseY, j);
                 obj.transform.position = new Vector3(i, poseY, j);
                 obj.transform.DOJump(pose, 1, 1, 0.5f);
@@ -64,7 +59,7 @@ public class MapMeshGenerator : IModule
                     _runtimeData.LowPoints.Add(new(i, j));
 
             }
-            await UniTask.Yield();
+                await UniTask.Yield();
         }
     }
 
@@ -82,16 +77,6 @@ public class MapMeshGenerator : IModule
             }
             await UniTask.Yield();
         }
-    }
-
-    public UniTask OnExit()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public UniTask OnPause()
-    {
-        throw new System.NotImplementedException();
     }
 }
 

@@ -3,16 +3,13 @@ using UnityEngine;
 using UniRx;
 using VContainer;
 
-public class CharacterModule : IModule
+public class CharacterModule : BaseModule
 {
     private CharacterDatabase _characterDatabase;
-    private string _moduleName = "CharacterController";
-    private ReactiveProperty<bool> _isActive;
     private CharacterView _characterView;
     private IRuntimeDataHolder _runtimeDataHolder;
     private Vector2Int _position;
     private CharacterRuntimeData _characterRuntimeData;
-    private CompositeDisposable _compositeDisposable;
 
     [Inject]
     public CharacterModule(
@@ -23,15 +20,18 @@ public class CharacterModule : IModule
         _characterDatabase = characterDatabase;
     }
 
-    public string Name => _moduleName;
+    public override int GetPriority()
+    {
+        return 1;
+    }
 
-    public IReactiveProperty<bool> IsActive => _isActive;
-
-    public async UniTask OnEnter()
+    public override async UniTask OnEnter()
     {
         await UniTask.Yield();
 
         if (!_runtimeDataHolder.TryGetData(out MapGeneratorRuntimeData data)) return;
+        _isActive.Value = true;
+        _isInited.Value = true;
         _compositeDisposable = new CompositeDisposable();
         _characterRuntimeData = new CharacterRuntimeData();
         _position = data.LowPoints[Random.Range(0, data.LowPoints.Count)];
@@ -57,16 +57,6 @@ public class CharacterModule : IModule
             _characterView.Rb.AddForce(Vector3.up * 10f, ForceMode.Impulse);
 
 
-    }
-
-    public async UniTask OnExit()
-    {
-        _compositeDisposable?.Dispose();
-    }
-
-    public UniTask OnPause()
-    {
-        throw new System.NotImplementedException();
     }
 }
 

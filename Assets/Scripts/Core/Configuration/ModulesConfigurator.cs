@@ -11,12 +11,22 @@ public class ModulesConfigurator : MonoBehaviour
         if (!_currentModules.Contains(module))
             _currentModules.Add(module);
         else
-            Debug.LogError($"Alredy added");
+            Debug.LogError("Alredy added");
     }
+
+    public void Release(IModule module)
+    {
+        if (_currentModules.Contains(module))
+            _currentModules.Remove(module);
+        else
+            Debug.LogError("Alrady released");
+    }
+
     public async UniTask ConfigureModules()
     {
         foreach (var module in _currentModules)
         {
+            if(!module.IsInited.Value)
             await module.OnEnter();
         }
     }
