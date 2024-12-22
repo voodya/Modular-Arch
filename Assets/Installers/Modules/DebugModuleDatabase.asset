@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GizmosDrower: {fileID: 4476432064670485916, guid: 9c6d9c6ccc3b42242b1436e09543674c,
     type: 3}
+  AttakerDrower: {fileID: 8347909024210826332, guid: 4492df8150f3adf409533ba6f83088af,
+    type: 3}

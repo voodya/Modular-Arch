@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Module.Character;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,6 +48,7 @@ public class GameCircle : MonoBehaviour, IGameCircle
     private async void GenerateGame()
     {
         await configurator.ConfigureModules();
+        ModuleViews.ForEach(view => view.ForceInclude());
         ModuleViews.ForEach(view => view.SetPausable());
     }
 }

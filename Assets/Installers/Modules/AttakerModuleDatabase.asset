@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a518a1849a6b334db01cb0c71e41855, type: 3}
+  m_Name: AttakerModuleDatabase
+  m_EditorClassIdentifier: 
+  ViewPfbs:
+  - {fileID: 4718321012284877005, guid: fe36de6ceeb75f443bbc8c395d55faa1, type: 3}
+  AttakeCount: 3

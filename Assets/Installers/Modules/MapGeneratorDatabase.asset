@@ -15,5 +15,9 @@ MonoBehaviour:
   _groundBlockPfb:
     m_AssetGUID: c17001ea4bf646648bcc2720f187ae66
     m_SubObjectName: 
+    m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
+  _heightStep: 0.25
+  _noizeScale: 0.2
+  _seed: 2024

@@ -6,6 +6,7 @@ using VContainer;
 public class DebugModuleDatabase : InstallerSO
 {
     [SerializeField] public GizmosDrower GizmosDrower;
+    [SerializeField] public AttackerDrower AttakerDrower;
 
     public override void Install(IContainerBuilder builder)
     {

@@ -6,15 +6,16 @@ using DG.Tweening;
 using VContainer;
 using System.Collections.Generic;
 
+
 public class MapMeshGenerator : BaseModule
 {
     private Vector2Int _mapSize = new Vector2Int(30, 30);
-    private float _noizeScale = 0.2f;
     private float[,] _mapRaw;
     private GameObject _mapMeshCell;
     private MapGeneratorDatabase _database;
     private MapGeneratorRuntimeData _runtimeData;
     private IRuntimeDataHolder _runtimeDataHolder;
+    private FastRandom _fastRandom;
 
     [Inject]
     public MapMeshGenerator(
@@ -23,6 +24,7 @@ public class MapMeshGenerator : BaseModule
     {
         _runtimeDataHolder = runtimeDataHolder;
         _database = database;
+        
     }
 
     public override async UniTask OnEnter()
@@ -30,12 +32,14 @@ public class MapMeshGenerator : BaseModule
         _runtimeData = new MapGeneratorRuntimeData();
         _isActive = new ReactiveProperty<bool>(false);
         _mapMeshCell = await Addressables.LoadAssetAsync<GameObject>(_database._groundBlockPfb);
+        _fastRandom = new FastRandom(_database._seed);
         await PrepareRawData();
         await InstanceObjects();
         _isActive.Value = true;
         _runtimeData.MapData = _mapRaw;
         _runtimeDataHolder.SetData(_runtimeData);
         await base.OnEnter();
+        
     }
 
     private async UniTask InstanceObjects()
@@ -46,8 +50,7 @@ public class MapMeshGenerator : BaseModule
             {
                 var obj = MonoBehaviour.Instantiate(_mapMeshCell);
                 bool isHigh = _mapRaw[i, j] > 0.5f;
-                //float poseY = Round(_mapRaw[i, j], 0.25f);
-                float poseY = isHigh ? 1 : 0;
+                float poseY = Round(_mapRaw[i, j], _database._heightStep);
                 Vector3 pose = new Vector3(i, poseY, j);
                 obj.transform.position = new Vector3(i, poseY, j);
                 obj.transform.DOJump(pose, 1, 1, 0.5f);
@@ -68,15 +71,22 @@ public class MapMeshGenerator : BaseModule
     private async UniTask PrepareRawData()
     {
         _mapRaw = new float[_mapSize.x, _mapSize.y];
+        float offset = _fastRandom.Range(0f, 1f);
+        Debug.LogError(offset);
 
         for (int i = 0; i < _mapSize.x; i++)
         {
             for (int j = 0; j < _mapSize.y; j++)
             {
-                _mapRaw[i, j] = Mathf.PerlinNoise(i * _noizeScale, j * _noizeScale);
+                _mapRaw[i, j] = Mathf.PerlinNoise(i * _database._noizeScale + offset, j * _database._noizeScale + offset);
             }
             await UniTask.Yield();
         }
+    }
+
+    public override int GetPriority()
+    {
+        return 2;
     }
 }
 
