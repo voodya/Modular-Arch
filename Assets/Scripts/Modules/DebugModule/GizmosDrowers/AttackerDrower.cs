@@ -6,9 +6,10 @@ public class AttackerDrower : MonoBehaviour
 {
     private AttakerModuleRuntimeData _attakerRuntimeData;
 
-    public void Configure(AttakerModuleRuntimeData mapGeneratorRuntimeData)
+    public GameObject Configure(AttakerModuleRuntimeData mapGeneratorRuntimeData)
     {
         _attakerRuntimeData = mapGeneratorRuntimeData;
+        return this.gameObject;
     }
 
     private void OnDrawGizmos()

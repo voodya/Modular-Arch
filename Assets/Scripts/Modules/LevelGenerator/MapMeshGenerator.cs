@@ -27,6 +27,27 @@ public class MapMeshGenerator : BaseModule
         
     }
 
+    public async override UniTask OnEnter(bool state)
+    {
+        if(state && !IsInited.Value)
+        {
+            _runtimeData = new MapGeneratorRuntimeData();
+            _isActive = new ReactiveProperty<bool>(false);
+            _mapMeshCell = await Addressables.LoadAssetAsync<GameObject>(_database._groundBlockPfb);
+            _fastRandom = new FastRandom(_database._seed);
+            await PrepareRawData();
+            await InstanceObjects();
+            _isActive.Value = true;
+            _runtimeData.MapData = _mapRaw;
+            _runtimeDataHolder.SetData(_runtimeData);
+        }
+        else if (!state)
+        {
+            _runtimeData?.ClearData();
+        }
+        await base.OnEnter(state);
+    }
+
     public override async UniTask OnEnter()
     {
         _runtimeData = new MapGeneratorRuntimeData();
@@ -54,7 +75,8 @@ public class MapMeshGenerator : BaseModule
                 Vector3 pose = new Vector3(i, poseY, j);
                 obj.transform.position = new Vector3(i, poseY, j);
                 obj.transform.DOJump(pose, 1, 1, 0.5f);
-                if(isHigh)
+                _runtimeData.Boxes.Add(obj);
+                if (isHigh)
                 {
                     _runtimeData.HightPoints.Add(new(i, j));
                 }
@@ -96,11 +118,23 @@ public class MapGeneratorRuntimeData : IModuleRuntimeData
     public float[,] MapData;
     public List<Vector2Int> LowPoints;
     public List<Vector2Int> HightPoints;
+    public List<GameObject> Boxes;
 
     public MapGeneratorRuntimeData()
     {
         LowPoints = new List<Vector2Int>();
         HightPoints = new List<Vector2Int>();
+        Boxes = new List<GameObject>();
+    }
+
+    public void ClearData()
+    {
+        for (var i = 0; i < Boxes.Count; i++)
+        {
+            MonoBehaviour.Destroy(Boxes[i]);
+        }
+        LowPoints.Clear();
+        HightPoints.Clear();
     }
 }
 

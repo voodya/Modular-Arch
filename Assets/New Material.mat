@@ -127,6 +127,8 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 0.8207547, g: 0.042586334, b: 0.042586334, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Offset: {r: -1.01, g: -0.89, b: 0, a: 0}
+    - _Offset_3: {r: 1.75, g: 2.13, b: -2.6, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Start_pose: {r: 14.59, g: 14.5, b: 0, a: 0}
   m_BuildTextureStacks: []

@@ -7,12 +7,6 @@
       "dependencies": {},
       "hash": "7c0f199fe0d3fc528024488ccd671e6c7b27745b"
     },
-    "com.merry-yellow.code-assist": {
-      "version": "file:com.merry-yellow.code-assist",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.unity.addressables": {
       "version": "2.2.2",
       "depth": 0,
@@ -237,6 +231,15 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "com.voodya.vooautoinject.vcontainer": {
+      "version": "https://github.com/voodya/VooAutoInject-VContainer.git?path=Assets/AutoInject",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "jp.hadashikick.vcontainer": "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer"
+      },
+      "hash": "707ad9ba19de3639b9b5792562159282467454a1"
     },
     "fastrandom": {
       "version": "https://github.com/vangogih/Dont-Use-UnityEngine.Random.git",

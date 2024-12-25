@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
+using Voodya.VooAutoInject.VContainer;
 
-public class GameCircle : MonoBehaviour, IGameCircle
+public class GameCircle : VContainerMonoBehaviour, IGameCircle
 {
     [SerializeField] private Button _generateLevel;
     [SerializeField] private ModuleView _viewPfb;
@@ -14,7 +15,6 @@ public class GameCircle : MonoBehaviour, IGameCircle
 
 
     private List<ModuleView> ModuleViews = new();
-    private ModulesConfigurator configurator;
 
     private readonly IList<Type> ReqiredTypes = new List<Type>
     {
@@ -23,23 +23,21 @@ public class GameCircle : MonoBehaviour, IGameCircle
     };
 
 
-    [Inject]
-    private IEnumerable<IModule> _modules;
+    [Inject] private IEnumerable<IModule> _modules;
+    private ModulesConfigurator _moduleConfigurator;
     public async UniTask Initialize()
     {
         _generateLevel.onClick.AddListener(GenerateGame);
-
-
-        configurator = new ModulesConfigurator();
+        _moduleConfigurator = new ModulesConfigurator(_modules);
         foreach (var module in _modules)
         {
             ModuleView view = Instantiate(_viewPfb, _parent);
             view.Configure(module);
-            view.OnIncluded += configurator.Register;
-            view.OnExcluded += configurator.Release;
+            view.OnIncluded += _moduleConfigurator.Register;
+            view.OnExcluded += _moduleConfigurator.Release;
             if (ReqiredTypes.Contains(module.GetType()))
             {
-                view.ForceInclude();
+                //view.ForceInclude();
             }
             ModuleViews.Add(view);
         }
@@ -47,8 +45,8 @@ public class GameCircle : MonoBehaviour, IGameCircle
 
     private async void GenerateGame()
     {
-        await configurator.ConfigureModules();
-        ModuleViews.ForEach(view => view.ForceInclude());
+        await _moduleConfigurator.UpdateBodulesState();
+        //ModuleViews.ForEach(view => view.ForceInclude());
         ModuleViews.ForEach(view => view.SetPausable());
     }
 }

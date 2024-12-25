@@ -28,6 +28,39 @@ namespace Module.Attcker
             return 10;
         }
 
+        public override UniTask OnEnter(bool state)
+        {
+            if(state && !IsInited.Value)
+            {
+                _compositeDisposable = new CompositeDisposable();
+                _runtimeData = new AttakerModuleRuntimeData();
+                if (_runtimeDataHolder.TryGetData(out MapGeneratorRuntimeData data))
+                {
+                    for (int i = 0; i < _database.AttakeCount; i++)
+                    {
+                        var position = data.HightPoints[URandom.Range(0, data.HightPoints.Count)];
+                        data.HightPoints.Remove(position);
+                        var attakerObj = MonoBehaviour.Instantiate(_database.ViewPfbs[URandom.Range(0, _database.ViewPfbs.Count)]);
+                        attakerObj.transform.position = new(position.x, 2, position.y);
+                        attakerObj.Init();
+                        _runtimeData.Views.Add(attakerObj);
+                    }
+                }
+
+                _runtimeDataHolder.SetData(_runtimeData);
+                StartAttakerBrains();
+            }
+            else if(!state)
+            {
+                _runtimeData?.ClearData();
+                _compositeDisposable?.Dispose();
+                _runtimeDataHolder.SetData(_runtimeData);
+            }
+
+
+            return base.OnEnter(state);
+        }
+
         public override UniTask OnEnter()
         {
             _compositeDisposable = new CompositeDisposable();
@@ -93,6 +126,15 @@ namespace Module.Attcker
         public AttakerModuleRuntimeData()
         {
             Views = new List<AttakerViewBase>();
+        }
+
+        public void ClearData()
+        {
+            for (var i = 0; i < Views.Count; i++) 
+            {
+                MonoBehaviour.Destroy(Views[i]);
+            }
+            Views.Clear();
         }
     }
 

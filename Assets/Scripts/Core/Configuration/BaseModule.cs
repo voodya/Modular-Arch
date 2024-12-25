@@ -25,6 +25,13 @@ public abstract class BaseModule : IModule
         return UniTask.CompletedTask;
     }
 
+    public virtual UniTask OnEnter(bool state)
+    {
+        _isActive.Value = state;
+        _isInited.Value = state;
+        return UniTask.CompletedTask;
+    }
+
     public virtual UniTask OnExit()
     {
         _compositeDisposable?.Dispose();

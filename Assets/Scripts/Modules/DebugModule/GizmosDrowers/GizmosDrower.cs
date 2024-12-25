@@ -6,9 +6,10 @@ public class GizmosDrower : MonoBehaviour
 {
     private MapGeneratorRuntimeData _mapGeneratorRuntimeData;
 
-    public void Configure(MapGeneratorRuntimeData mapGeneratorRuntimeData)
+    public GameObject Configure(MapGeneratorRuntimeData mapGeneratorRuntimeData)
     {
         _mapGeneratorRuntimeData = mapGeneratorRuntimeData;
+        return this.gameObject;
     }
 
     private void OnDrawGizmos()

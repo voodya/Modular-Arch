@@ -9,6 +9,7 @@ public interface IModule
     public IReactiveProperty<bool> IsInited { get;} 
 
     public UniTask OnEnter();
+    public UniTask OnEnter(bool state);
     public UniTask OnExit();
     public UniTask OnPause(bool pause);
 }
